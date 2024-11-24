@@ -6,11 +6,11 @@
 //
 import Foundation
 
-struct TaskTableCellParams {
-    let row: Int
+struct ToDoItem {
+    let id: UUID
     let status: Bool
     let title: String    
     let description: String
-    let date: String
+    let date: Date
 }
 

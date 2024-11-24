@@ -63,7 +63,7 @@ final class TaskTableCell: UITableViewCell {
     }
     
     // MARK: - Public Methods
-    func configure(with params: TaskTableCellParams) {
+    func configure(with params: ToDoItemCellParams) {
         self.rowIndex = params.row
         
         switch params.status {

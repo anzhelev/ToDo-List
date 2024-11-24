@@ -7,7 +7,7 @@
 import UIKit
 
 final class ContextMenuPreviewVC: UIViewController {
-    private let params: TaskTableCellParams
+    private let params: ToDoItemCellParams
     private let size: CGSize
     
     private let titleLabel: UILabel = {
@@ -35,7 +35,7 @@ final class ContextMenuPreviewVC: UIViewController {
         return label
     }()
     
-    init(params: TaskTableCellParams, size: CGSize) {
+    init(params: ToDoItemCellParams, size: CGSize) {
         self.params = params
         self.size = size
         

@@ -114,6 +114,7 @@ class ToDoListViewController: UIViewController, ToDoListViewControllerProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        bindViewModel()
         configureUI()
     }
     
@@ -121,6 +122,7 @@ class ToDoListViewController: UIViewController, ToDoListViewControllerProtocol {
         super.viewWillAppear(true)
         
         navigationController?.isNavigationBarHidden = true
+        viewModel.viewWillAppear()
     }
     
     @objc private func newTaskCreationButtonPressed() {
@@ -128,6 +130,15 @@ class ToDoListViewController: UIViewController, ToDoListViewControllerProtocol {
     }
     
     // MARK: - Private Methods
+    private func bindViewModel() {
+        viewModel.itemsAdded.bind {[weak self] itemsAdded in
+            guard let itemsAdded else {
+                return
+            }
+            self?.updateTable(with: itemsAdded)
+        }
+    }
+    
     private func configureUI() {
         self.view.backgroundColor = .blackMainBackground
         
@@ -169,6 +180,10 @@ class ToDoListViewController: UIViewController, ToDoListViewControllerProtocol {
             newTaskCreationButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
+    
+    private func updateTable(with indexes: [IndexPath]) {
+        taskTable.insertRows(at: indexes, with: .automatic)
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -196,10 +211,6 @@ extension ToDoListViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension ToDoListViewController: UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //        viewModel.charIsSelected (row: indexPath.row)
-    }
-    
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         
         let previewSize = tableView.rectForRow(at: indexPath).size
@@ -209,22 +220,26 @@ extension ToDoListViewController: UITableViewDelegate {
         },
                                           actionProvider: { actions in
             return UIMenu(children: [
-                UIAction(title: "Редактировать"
+                UIAction(title: "Редактировать",
+                         image: UIImage(named: "edit")
                         ) { [weak self] _ in
-                            
+                            self?.viewModel.editItemButtonPressed(for: indexPath.row)
                         },
                 
-                UIAction(title: "Поделиться") { [weak self] _ in
-                    
-                },
+                UIAction(title: "Поделиться",
+                         image: UIImage(named: "export")
+                        ) { [weak self] _ in
+                            self?.viewModel.shareItemButtonPressed(for: indexPath.row)
+                        },
                 
-                UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
-                    
-                },
+                UIAction(title: "Удалить",
+                         image: UIImage(named: "trash"),
+                         attributes: .destructive
+                        ) { [weak self] _ in
+                            self?.viewModel.deleteItemButtonPressed(for: indexPath.row)
+                        },
             ])
         })
-        
-        
     }
 }
 
