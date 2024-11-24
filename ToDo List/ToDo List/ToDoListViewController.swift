@@ -141,6 +141,7 @@ class ToDoListViewController: UIViewController, ToDoListViewControllerProtocol {
     
     private func configureUI() {
         self.view.backgroundColor = .blackMainBackground
+        updateTaskCountLabel()
         
         for element in [titleLabel, searchBar, footer, taskTable, divider, tascCountLabel, newTaskCreationButton] {
             element.translatesAutoresizingMaskIntoConstraints = false
@@ -171,18 +172,23 @@ class ToDoListViewController: UIViewController, ToDoListViewControllerProtocol {
             divider.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             divider.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
-            tascCountLabel.centerYAnchor.constraint(equalTo: footer.centerYAnchor),
-            tascCountLabel.centerXAnchor.constraint(equalTo: footer.centerXAnchor),
-            
             newTaskCreationButton.widthAnchor.constraint(equalToConstant: 68),
             newTaskCreationButton.heightAnchor.constraint(equalToConstant: 44),
             newTaskCreationButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            newTaskCreationButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            newTaskCreationButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            tascCountLabel.centerYAnchor.constraint(equalTo: newTaskCreationButton.centerYAnchor),
+            tascCountLabel.centerXAnchor.constraint(equalTo: footer.centerXAnchor)
         ])
     }
     
     private func updateTable(with indexes: [IndexPath]) {
         taskTable.insertRows(at: indexes, with: .automatic)
+        updateTaskCountLabel()
+    }
+    
+    private func updateTaskCountLabel() {
+        tascCountLabel.text = viewModel.getTascCountLabelText()
     }
 }
 
@@ -248,7 +254,7 @@ extension ToDoListViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchBarText = searchText.lowercased()
-        print(searchBarText ?? "")
+        print("@@@ ", searchBarText ?? "")
     }
     
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {

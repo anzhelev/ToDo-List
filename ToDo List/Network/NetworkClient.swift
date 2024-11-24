@@ -39,7 +39,7 @@ final class NetworkClient {
                         for item in data.todos {
                             newItems.append(.init(id: UUID(),
                                                   status: item.completed,
-                                                  title: String(item.id),
+                                                  title: "No title", //String(item.id),
                                                   description: item.todo,
                                                   date: Date())
                             )

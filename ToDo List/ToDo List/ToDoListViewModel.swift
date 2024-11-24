@@ -11,6 +11,7 @@ protocol ToDoListViewModelProtocol {
     var itemsAdded: Observable<[IndexPath]> { get set }
     func viewWillAppear()
     func getTableRowCount() -> Int
+    func getTascCountLabelText() -> String
     func getParams(for row: Int) -> ToDoItemCellParams
     func getPreview(for row: Int, with size: CGSize) -> UIViewController
     func editItemButtonPressed(for item: Int)
@@ -61,6 +62,16 @@ final class ToDoListViewModel: ToDoListViewModelProtocol {
     
     func getTableRowCount() -> Int {
         todos.count
+    }
+    
+    func getTascCountLabelText() -> String {
+        String.localizedStringWithFormat(
+            NSLocalizedString("numberOfTasks", comment: ""),
+            todos.count
+        )
+        
+        
+        
     }
     
     func getParams(for row: Int) -> ToDoItemCellParams {
